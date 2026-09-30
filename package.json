@@ -1,0 +1,14 @@
+{
+  "name": "extraction-table",
+  "private": true,
+  "workspaces": ["frontend", "fake-llm"],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:llm\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "cd backend && .venv/bin/uvicorn main:app --reload --port 3001",
+    "dev:llm": "npm run dev --workspace=fake-llm"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
