@@ -51,32 +51,6 @@ export default function Home() {
 
   const allOk = status?.allOk ?? false;
 
-  // --- Practice: ask the fake LLM through the backend ---
-  const [question, setQuestion] = useState("What was the sample size?");
-  const [answer, setAnswer] = useState<string | null>(null);
-  const [asking, setAsking] = useState(false);
-  const [askError, setAskError] = useState<string | null>(null);
-
-  const askLLM = async () => {
-    setAsking(true);
-    setAnswer(null);
-    setAskError(null);
-    try {
-      const res = await fetch("http://localhost:3001/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
-      });
-      const data = await res.json();
-      if (data.error) setAskError(data.error);
-      else setAnswer(data.answer);
-    } catch (err) {
-      setAskError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setAsking(false);
-    }
-  };
-
   return (
     <main className="mx-auto max-w-2xl p-8">
       <h1 className="text-2xl font-bold">
@@ -150,36 +124,6 @@ export default function Home() {
           </ul>
         </div>
       )}
-
-      {/* Practice: ask the LLM */}
-      <div className="mt-8 rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold">Ask the LLM (practice)</h2>
-        <div className="mt-3 flex gap-2">
-          <input
-            className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Ask a question..."
-          />
-          <button
-            onClick={askLLM}
-            disabled={asking}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-          >
-            {asking ? "Asking..." : "Ask"}
-          </button>
-        </div>
-        {answer && (
-          <div className="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
-            {answer}
-          </div>
-        )}
-        {askError && (
-          <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">
-            {askError}
-          </div>
-        )}
-      </div>
     </main>
   );
 }
